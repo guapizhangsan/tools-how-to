@@ -1,0 +1,116 @@
+执行顺序：first action script->rename->prerotate script->copy and truncate->postrotate script->compres->last action script
+
+[steve@v shell_app]$ cat appengine
+compress
+/opt/shell_app/*.log {
+
+        firstaction
+        ls -l /opt/shell_app/
+        endscript
+
+        lastaction
+        ls -l /opt/shell_app/
+        endscript
+        postrotate
+        ls -l /opt/shell_app/
+        endscript
+        prerotate
+                echo $rotate
+                /opt/shell_app/cut.sh ${1}.8.gz
+        endscript
+        daily
+        copytruncate
+        size 1k
+        missingok
+        rotate 7
+        notifempty
+        create 644 steve steve
+
+}
+
+$logrotate -v -s ./logrotate.status appengine; cp test.log.bak test.log; ll
+reading config file appengine
+reading config info for /opt/shell_app/*.log
+
+Handling 1 logs
+
+rotating pattern: /opt/shell_app/*.log  1024 bytes (7 rotations)
+empty log files are not rotated, old logs are removed
+considering log /opt/shell_app/test.log
+  log needs rotating
+running first action script
+total 52
+-rw-rw-r-- 1 steve steve   370 Mar  6 16:39 appengine
+drwxrwxr-x 2 steve steve  4096 Mar  6 16:39 bak
+-rwxrwxr-x 1 steve steve   561 Mar  6 16:40 cut.sh
+-rw-rw-r-- 1 steve steve  2139 Mar  6 16:39 log
+-rw-rw-r-- 1 steve steve    64 Mar  6 16:39 logrotate.status
+-rw-r--r-- 1 steve steve 16082 Mar  6 16:39 test.log
+-rw-rw-r-- 1 steve steve 16082 Mar  6 12:03 test.log.bak
+rotating log /opt/shell_app/test.log, log->rotateCount is 7
+dateext suffix '-20170306'
+glob pattern '-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+renaming /opt/shell_app/test.log.7.gz to /opt/shell_app/test.log.8.gz (rotatecount 7, logstart 1, i 7),
+old log /opt/shell_app/test.log.7.gz does not exist
+renaming /opt/shell_app/test.log.6.gz to /opt/shell_app/test.log.7.gz (rotatecount 7, logstart 1, i 6),
+old log /opt/shell_app/test.log.6.gz does not exist
+renaming /opt/shell_app/test.log.5.gz to /opt/shell_app/test.log.6.gz (rotatecount 7, logstart 1, i 5),
+old log /opt/shell_app/test.log.5.gz does not exist
+renaming /opt/shell_app/test.log.4.gz to /opt/shell_app/test.log.5.gz (rotatecount 7, logstart 1, i 4),
+old log /opt/shell_app/test.log.4.gz does not exist
+renaming /opt/shell_app/test.log.3.gz to /opt/shell_app/test.log.4.gz (rotatecount 7, logstart 1, i 3),
+old log /opt/shell_app/test.log.3.gz does not exist
+renaming /opt/shell_app/test.log.2.gz to /opt/shell_app/test.log.3.gz (rotatecount 7, logstart 1, i 2),
+old log /opt/shell_app/test.log.2.gz does not exist
+renaming /opt/shell_app/test.log.1.gz to /opt/shell_app/test.log.2.gz (rotatecount 7, logstart 1, i 1),
+old log /opt/shell_app/test.log.1.gz does not exist
+renaming /opt/shell_app/test.log.0.gz to /opt/shell_app/test.log.1.gz (rotatecount 7, logstart 1, i 0),
+old log /opt/shell_app/test.log.0.gz does not exist
+log /opt/shell_app/test.log.8.gz doesn't exist -- won't try to dispose of it
+running prerotate script
+
+++ ls -l /opt/shell_app/
+total 52
+-rw-rw-r-- 1 steve steve   370 Mar  6 16:39 appengine
+drwxrwxr-x 2 steve steve  4096 Mar  6 16:39 bak
+-rwxrwxr-x 1 steve steve   561 Mar  6 16:40 cut.sh
+-rw-rw-r-- 1 steve steve  2139 Mar  6 16:39 log
+-rw-rw-r-- 1 steve steve    64 Mar  6 16:39 logrotate.status
+-rw-r--r-- 1 steve steve 16082 Mar  6 16:39 test.log
+-rw-rw-r-- 1 steve steve 16082 Mar  6 12:03 test.log.bak
+++ '[' -f /opt/shell_app/test.log.8.gz ']'
++++ date
+++ echo Mon Mar 6 16:40:27 CST 2017err
+++ exit
+copying /opt/shell_app/test.log to /opt/shell_app/test.log.1
+truncating /opt/shell_app/test.log
+running postrotate script
+total 52
+-rw-rw-r-- 1 steve steve   370 Mar  6 16:39 appengine
+drwxrwxr-x 2 steve steve  4096 Mar  6 16:39 bak
+-rwxrwxr-x 1 steve steve   561 Mar  6 16:40 cut.sh
+-rw-rw-r-- 1 steve steve  2170 Mar  6 16:40 log
+-rw-rw-r-- 1 steve steve    64 Mar  6 16:39 logrotate.status
+-rw-r--r-- 1 steve steve     0 Mar  6 16:40 test.log
+-rw-r--r-- 1 steve steve 16082 Mar  6 16:40 test.log.1
+-rw-rw-r-- 1 steve steve 16082 Mar  6 12:03 test.log.bak
+compressing log with: /bin/gzip
+running last action script
+total 40
+-rw-rw-r-- 1 steve steve   370 Mar  6 16:39 appengine
+drwxrwxr-x 2 steve steve  4096 Mar  6 16:39 bak
+-rwxrwxr-x 1 steve steve   561 Mar  6 16:40 cut.sh
+-rw-rw-r-- 1 steve steve  2170 Mar  6 16:40 log
+-rw-rw-r-- 1 steve steve    64 Mar  6 16:39 logrotate.status
+-rw-r--r-- 1 steve steve     0 Mar  6 16:40 test.log
+-rw-r--r-- 1 steve steve   737 Mar  6 16:40 test.log.1.gz
+-rw-rw-r-- 1 steve steve 16082 Mar  6 12:03 test.log.bak
+total 56
+-rw-rw-r-- 1 steve steve   370 Mar  6 16:39 appengine
+drwxrwxr-x 2 steve steve  4096 Mar  6 16:39 bak
+-rwxrwxr-x 1 steve steve   561 Mar  6 16:40 cut.sh
+-rw-rw-r-- 1 steve steve  2170 Mar  6 16:40 log
+-rw-rw-r-- 1 steve steve    64 Mar  6 16:40 logrotate.status
+-rw-r--r-- 1 steve steve 16082 Mar  6 16:40 test.log
+-rw-r--r-- 1 steve steve   737 Mar  6 16:40 test.log.1.gz
+-rw-rw-r-- 1 steve steve 16082 Mar  6 12:03 test.log.bak
