@@ -1,4 +1,4 @@
-执行顺序：first action script->rename->prerotate script->copy and truncate->postrotate script->compres->last action script
+执行顺序：first action script->foreach(rename->prerotate script->copy and truncate->postrotate script->compres)->last action script
 
 [steve@v shell_app]$ cat appengine
 compress
