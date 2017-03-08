@@ -1,3 +1,19 @@
+note:
+If "sharedscripts" is set in logrotate's config file, please confirm 
+that the absolute path to the log file is passed as first argument  to  the script.
+like this
+/tmp/abc.log
+{
+sharedscripts
+prerotate
+        /root/test.sh "${1}.8.gz"
+endscript
+}
+when exec the command "echo $1" in /root/test.sh, it will show "/tmp/abc.log .8.gz".Note that space in filename and ".8.gz".
+Obviously, it is terrible.When nosharedscripts is set or sharedscripts is not set, it brings me back to life.
+
+
+
 执行顺序：first action script->foreach(rename->prerotate script->copy and truncate->postrotate script->compres)->last action script
 
 [steve@v shell_app]$ cat appengine
