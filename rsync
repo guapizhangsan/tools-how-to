@@ -94,3 +94,33 @@ total 0
 -rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 bbb
 -rw-rw-r-- 1 nagios nagios 0 Apr  8 16:20 ccc
 total 0 
+
+
+番外篇
+dst的dir是dir/*那这个*其实就是一个文件夹得名字，广义上dir/*等价于dir也等价于dir/dir1/dir2
+$ rsync -avz --delete /tmp/mytest/testabc/* /home/nagios/mytest/justfortest/*;ll /home/nagios/mytest/justfortest;
+sending incremental file list
+
+sent 69 bytes  received 12 bytes  162.00 bytes/sec
+total size is 0  speedup is 0.00
+total 4
+drwxrwxr-x 2 nagios nagios 4096 Apr  8 16:49 *
+$ rsync -avz --delete /tmp/mytest/testabc/ /home/nagios/mytest/justfortest/*;ll /home/nagios/mytest/justfortest;
+sending incremental file list
+./
+
+sent 86 bytes  received 15 bytes  202.00 bytes/sec
+total size is 0  speedup is 0.00
+total 4
+drwxrwxr-x 2 nagios nagios 4096 Apr  8 16:20 *
+$ rsync -avz --delete /tmp/mytest/testabc /home/nagios/mytest/justfortest/*;ll /home/nagios/mytest/justfortest;
+sending incremental file list
+testabc/
+testabc/aaa
+testabc/bbb
+testabc/ccc
+
+sent 212 bytes  received 73 bytes  570.00 bytes/sec
+total size is 0  speedup is 0.00
+total 4
+drwxrwxr-x 3 nagios nagios 4096 Apr  8 16:50 *
