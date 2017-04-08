@@ -1,0 +1,96 @@
+rsync -avz src dst
+dst是dir或dir/对结果不影响
+src如果是dir/和dir/*，那结果一样的
+src如果是dir 那就将该dir同步到dst，如果是dir/就是将dir下的文件同步到dst
+
+example
+
+dst是dir或dir/对结果不影响，都是将testabc同步到dst路径下的testabc
+$ rsync -avz /tmp/mytest/testabc /home/nagios/mytest/justfortest;ll /home/nagios/mytest/justfortest;rm -rf /home/nagios/mytest/justfortest/*;ll  /home/nagios/mytest/justfortest
+sending incremental file list
+testabc/
+testabc/aaa
+testabc/bbb
+testabc/ccc
+
+sent 212 bytes  received 73 bytes  570.00 bytes/sec
+total size is 0  speedup is 0.00
+total 4
+drwxrwxr-x 2 nagios nagios 4096 Apr  8 16:20 testabc
+total 0
+$ rsync -avz /tmp/mytest/testabc /home/nagios/mytest/justfortest/;ll /home/nagios/mytest/justfortest;rm -rf /home/nagios/mytest/justfortest/*;ll  /home/nagios/mytest/justfortest
+sending incremental file list
+testabc/
+testabc/aaa
+testabc/bbb
+testabc/ccc
+
+sent 212 bytes  received 73 bytes  570.00 bytes/sec
+total size is 0  speedup is 0.00
+total 4
+drwxrwxr-x 2 nagios nagios 4096 Apr  8 16:20 testabc
+total 0
+
+
+
+
+dst是dir或dir/对结果不影响，都是将testabc路径下的文件同步到dst路径下
+$ rsync -avz /tmp/mytest/testabc/ /home/nagios/mytest/justfortest;ll /home/nagios/mytest/justfortest;rm -rf /home/nagios/mytest/justfortest/*;ll  /home/nagios/mytest/justfortest
+sending incremental file list
+./
+aaa
+bbb
+ccc
+
+sent 194 bytes  received 72 bytes  532.00 bytes/sec
+total size is 0  speedup is 0.00
+total 0
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 aaa
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 bbb
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 16:20 ccc
+total 0
+$ rsync -avz /tmp/mytest/testabc/ /home/nagios/mytest/justfortest/;ll /home/nagios/mytest/justfortest;rm -rf /home/nagios/mytest/justfortest/*;ll  /home/nagios/mytest/justfortest
+sending incremental file list
+./
+aaa
+bbb
+ccc
+
+sent 194 bytes  received 72 bytes  532.00 bytes/sec
+total size is 0  speedup is 0.00
+total 0
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 aaa
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 bbb
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 16:20 ccc
+total 0
+
+
+
+
+dst是dir或dir/对结果不影响，都是将testabc路径下的文件同步到dst路径下
+$ rsync -avz /tmp/mytest/testabc/* /home/nagios/mytest/justfortest/;ll /home/nagios/mytest/justfortest;rm -rf /home/nagios/mytest/justfortest/*;ll  /home/nagios/mytest/justfortest
+sending incremental file list
+aaa
+bbb
+ccc
+
+sent 177 bytes  received 69 bytes  492.00 bytes/sec
+total size is 0  speedup is 0.00
+total 0
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 aaa
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 bbb
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 16:20 ccc
+total 0
+$ rsync -avz /tmp/mytest/testabc/* /home/nagios/mytest/justfortest;ll /home/nagios/mytest/justfortest;rm -rf /home/nagios/mytest/justfortest/*;ll  /home/nagios/mytest/justfortest
+sending incremental file list
+aaa
+bbb
+ccc
+
+sent 177 bytes  received 69 bytes  492.00 bytes/sec
+total size is 0  speedup is 0.00
+total 0
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 aaa
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 15:50 bbb
+-rw-rw-r-- 1 nagios nagios 0 Apr  8 16:20 ccc
+total 0 
